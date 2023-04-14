@@ -1,11 +1,3 @@
-// підключити бібліотеку в проект +
-// підключення функціїї +
-// записати елементи в обєкт +-
-// вибір дати
-// відлік часу
-// форматування часу
-// підключення notifix
-
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
@@ -22,7 +14,7 @@ const refs = {
   secondsValue: document.querySelector('[data-seconds]'),
 };
 
-refs.startTimerBtn.setAttribute('disabled', 'true');
+refs.startTimerBtn.disabled = true;
 
 const options = {
   enableTime: true,
@@ -31,16 +23,15 @@ const options = {
   minuteIncrement: 1,
   onChange(selectedDates) {
     selectedDates[0] > Date.now()
-      ? refs.startTimerBtn.removeAttribute('disabled')
-      : refs.startTimerBtn.setAttribute('disabled', 'true');
+      ? (refs.startTimerBtn.disabled = false)
+      : (refs.startTimerBtn.disabled = true);
   },
   onClose(selectedDates) {
     if (selectedDates[0] > Date.now()) {
       const { inputDatetime, startTimerBtn } = refs;
       startTimerBtn.addEventListener('click', () => {
-        inputDatetime.setAttribute('disabled', 'true');
-        startTimerBtn.setAttribute('disabled', 'true');
-
+        inputDatetime.disabled = true;
+        startTimerBtn.disabled = true;
         onChangeTimer(selectedDates[0], inputDatetime, startTimerBtn);
       });
     } else {
@@ -63,7 +54,7 @@ function onChangeTimer(timedate, ...args) {
       secondsValue.textContent = addLeadingZero(seconds);
     } else {
       clearInterval(timerId);
-      args.forEach(arg => arg.removeAttribute('disabled'));
+      args.forEach(item => (item.disabled = false));
     }
   }, 1000);
 }
