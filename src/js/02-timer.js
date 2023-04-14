@@ -14,6 +14,8 @@ const refs = {
   secondsValue: document.querySelector('[data-seconds]'),
 };
 
+let intervalId = null;
+
 refs.startTimerBtn.disabled = true;
 
 const options = {
@@ -43,15 +45,14 @@ const options = {
 flatpickr(refs.inputDatetime, options);
 
 function onChangeTimer(timedate, ...args) {
-  const intervalId = setInterval(() => {
+  intervalId = setInterval(() => {
     const resultOfDifference = timedate - Date.now();
     const { days, hours, minutes, seconds } = convertMs(resultOfDifference);
-    const { daysValue, hoursValue, minutesValue, secondsValue } = refs;
     if (resultOfDifference >= 0) {
-      daysValue.textContent = addLeadingZero(days);
-      hoursValue.textContent = addLeadingZero(hours);
-      minutesValue.textContent = addLeadingZero(minutes);
-      secondsValue.textContent = addLeadingZero(seconds);
+      refs.daysValue.textContent = addLeadingZero(days);
+      refs.hoursValue.textContent = addLeadingZero(hours);
+      refs.minutesValue.textContent = addLeadingZero(minutes);
+      refs.secondsValue.textContent = addLeadingZero(seconds);
     } else {
       clearInterval(intervalId);
       args.forEach(item => (item.disabled = false));
