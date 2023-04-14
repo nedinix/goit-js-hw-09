@@ -7,14 +7,11 @@ import { convertMs } from './helpers/convertMs';
 const refs = {
   inputDatetime: document.querySelector('input#datetime-picker'),
   startTimerBtn: document.querySelector('.timer-start'),
-
   daysValue: document.querySelector('[data-days]'),
   hoursValue: document.querySelector('[data-hours]'),
   minutesValue: document.querySelector('[data-minutes]'),
   secondsValue: document.querySelector('[data-seconds]'),
 };
-
-let intervalId = null;
 
 refs.startTimerBtn.disabled = true;
 
@@ -24,18 +21,16 @@ const options = {
   defaultDate: new Date(),
   minuteIncrement: 1,
   onChange(selectedDates) {
-    selectedDates[0] > Date.now()
-      ? (refs.startTimerBtn.disabled = false)
-      : (refs.startTimerBtn.disabled = true) &
-        Notify.failure('Please choose a date in the future');
+    refs.startTimerBtn.disabled =
+      selectedDates[0] > Date.now()
+        ? false
+        : Notify.failure('Please choose a date in the future') || true;
   },
   onClose(selectedDates) {
     if (selectedDates[0] > Date.now()) {
-      const { inputDatetime, startTimerBtn } = refs;
-      startTimerBtn.addEventListener('click', () => {
-        inputDatetime.disabled = true;
-        startTimerBtn.disabled = true;
-        onChangeTimer(selectedDates[0], inputDatetime, startTimerBtn);
+      refs.startTimerBtn.addEventListener('click', () => {
+        toggleControlBtn(true);
+        onChangeTimer(selectedDates[0]);
       });
     } else {
       Notify.failure('Please choose a date in the future');
@@ -45,9 +40,9 @@ const options = {
 
 flatpickr(refs.inputDatetime, options);
 
-function onChangeTimer(timedate, ...args) {
-  intervalId = setInterval(() => {
-    const resultOfDifference = timedate - Date.now();
+function onChangeTimer(timeDate) {
+  const intervalId = setInterval(() => {
+    const resultOfDifference = timeDate - Date.now();
     const { days, hours, minutes, seconds } = convertMs(resultOfDifference);
 
     if (resultOfDifference >= 0) {
@@ -57,11 +52,16 @@ function onChangeTimer(timedate, ...args) {
       refs.secondsValue.textContent = addLeadingZero(seconds);
     } else {
       clearInterval(intervalId);
-      args.forEach(item => (item.disabled = false));
+      toggleControlBtn(true);
     }
   }, 1000);
 }
 
 function addLeadingZero(value) {
   return value.toString().padStart(2, '0');
+}
+
+function toggleControlBtn(value) {
+  refs.inputDatetime.disabled = value;
+  refs.startTimerBtn.disabled = value;
 }
