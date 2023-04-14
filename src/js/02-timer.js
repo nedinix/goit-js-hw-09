@@ -26,7 +26,8 @@ const options = {
   onChange(selectedDates) {
     selectedDates[0] > Date.now()
       ? (refs.startTimerBtn.disabled = false)
-      : (refs.startTimerBtn.disabled = true);
+      : (refs.startTimerBtn.disabled = true) &
+        Notify.failure('Please choose a date in the future');
   },
   onClose(selectedDates) {
     if (selectedDates[0] > Date.now()) {
@@ -48,6 +49,7 @@ function onChangeTimer(timedate, ...args) {
   intervalId = setInterval(() => {
     const resultOfDifference = timedate - Date.now();
     const { days, hours, minutes, seconds } = convertMs(resultOfDifference);
+
     if (resultOfDifference >= 0) {
       refs.daysValue.textContent = addLeadingZero(days);
       refs.hoursValue.textContent = addLeadingZero(hours);
