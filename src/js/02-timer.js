@@ -43,7 +43,7 @@ const options = {
 flatpickr(refs.inputDatetime, options);
 
 function onChangeTimer(timedate, ...args) {
-  const timerId = setInterval(() => {
+  const intervalId = setInterval(() => {
     const resultOfDifference = timedate - Date.now();
     const { days, hours, minutes, seconds } = convertMs(resultOfDifference);
     const { daysValue, hoursValue, minutesValue, secondsValue } = refs;
@@ -53,7 +53,7 @@ function onChangeTimer(timedate, ...args) {
       minutesValue.textContent = addLeadingZero(minutes);
       secondsValue.textContent = addLeadingZero(seconds);
     } else {
-      clearInterval(timerId);
+      clearInterval(intervalId);
       args.forEach(item => (item.disabled = false));
     }
   }, 1000);
