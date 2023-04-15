@@ -13,8 +13,7 @@ refs.stopBtn.addEventListener('click', onStopBtn);
 refs.stopBtn.disabled = true;
 
 function onChangeBackgroundColor() {
-  refs.startBtn.disabled = true;
-  refs.stopBtn.disabled = false;
+  toggleControlBtn(true);
 
   timerId = setInterval(() => {
     const color = getRandomHexColor();
@@ -24,6 +23,10 @@ function onChangeBackgroundColor() {
 
 function onStopBtn() {
   clearInterval(timerId);
-  refs.stopBtn.disabled = true;
-  refs.startBtn.disabled = false;
+  toggleControlBtn(false);
+}
+
+function toggleControlBtn(value) {
+  refs.startBtn.disabled = value;
+  refs.stopBtn.disabled = !value;
 }
