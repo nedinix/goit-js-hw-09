@@ -52,7 +52,7 @@ function onChangeTimer(timeDate) {
       refs.secondsValue.textContent = addLeadingZero(seconds);
     } else {
       clearInterval(intervalId);
-      toggleControlBtn(true);
+      toggleControlBtn(false);
     }
   }, 1000);
 }
